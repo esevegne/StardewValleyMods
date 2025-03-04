@@ -135,9 +135,9 @@ namespace BetterShopMenu
             // this patches out ShopMenu.draw.
             // excluding the grid layout draw, our draw procedure is really mostly a copy of much the Stardew ShopMenu.draw code.
             Type[] drawParams =
-            [
+            {
                 typeof(SpriteBatch)
-            ];
+            };
             mInfo = harmony.Patch(AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.draw), drawParams),
                 new HarmonyMethod(typeof(ShopMenuPatches), nameof(ShopMenuPatches.ShopMenu_draw_Prefix))
                 );
@@ -226,7 +226,7 @@ namespace BetterShopMenu
             RightClickDown = false;
             PurchaseCountdown = -1;
 
-            Categories = [];
+            Categories = new List<int>();
             HasRecipes = false;
             foreach (var salable in InitialItems)
             {
@@ -710,7 +710,7 @@ namespace BetterShopMenu
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             var shop = Shop;
-
+            
             if (shop == null)
                 return;
             if (Game1.activeClickableMenu != shop)
@@ -751,7 +751,7 @@ namespace BetterShopMenu
                     CloseQuantityDialog(true);
                 }
             }
-            else if (e.Button is SButton.MouseLeft or SButton.MouseRight)
+            else if (e.Button is SButton.MouseLeft or SButton.MouseRight or SButton.ControllerA or SButton.ControllerX)
             {
                 var uiCursor = Utility.ModifyCoordinatesForUIScale(e.Cursor.ScreenPixels);
                 int x = (int)uiCursor.X;
